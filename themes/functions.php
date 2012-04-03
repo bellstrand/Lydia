@@ -9,9 +9,10 @@
 */
 function get_debug(){
 	$ly = CLydia::Instance();
-	$html = '<h2>Debuginformation</h2><hr><p>The content of the config array:</p><pre>' . htmlentities(print_r($ly->config, true)) . '</pre>';
-	$html .= "<hr><p>The content of the data array:</p><pre>" . htmlentities(print_r($ly->data, true)) . "</pre>";
-	$html .= "<hr><p>The content of the request array:</p><pre>" . htmlentities(print_r($ly->request, true)) . "</pre>";
+	$html = null;
+	if(isset($ly->config['debug']['display-lydia'])){
+		$html = "<hr><h3>Debuginformation</h3><p>The content of CLydia:</p><pre>" . htmlent(print_r($ly, true)) . '</pre>';
+	}
 	return $html;
 }
 
