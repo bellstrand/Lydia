@@ -13,12 +13,26 @@ ini_set('display_errors', 1);
 /**
 * Set what to show as debug or developer information in the get_debug() theme helper.
 */
-$ly->config['debug']['display-lydia'] = true;
+$ly->config['debug']['lydia'] = false;
+$ly->config['debug']['session'] = false;
+$ly->config['debug']['timer'] = true;
+$ly->config['debug']['db-num-queries'] = true;
+$ly->config['debug']['db-queries'] = true;
+
+/**
+* Set database(s)
+*/
+$ly->config['database'][0]['dsn'] = 'sqlite:' . LYDIA_SITE_PATH . '/data/.ht.sqlite';
 
 /**
 * Define session name
 */
 $ly->config['session_name'] = preg_replace('/[:\.\/-_]/', '', $_SERVER['SERVER_NAME']);
+
+/**
+* Define session key.
+*/
+$ly->config['session_key'] = 'lydia';
 
 /**
 * Set a base_url to use another then the default calculated
@@ -61,6 +75,7 @@ $ly->config['url_type'] = 1;
 $ly->config['controllers'] = array(
 	'index' 	=> array('enabled' => true, 'class' => 'CCIndex'),
 	'developer' => array('enabled' => true,'class' => 'CCDeveloper'),
+	'guestbook' => array('enabled' => true,'class' => 'CCGuestbook'),
 );
 
 /**

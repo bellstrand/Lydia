@@ -26,3 +26,11 @@ spl_autoload_register('autoload');
 function htmlent($str, $flags = ENT_COMPAT){
 	return htmlentities($str, $flags, CLydia::Instance()->config['character_encoding']);
 }
+
+/**
+* Set a default exception handler and enable logging in it.
+*/
+function exception_handler($exception){
+	echo "Lydia: Uncaught exception: <p>" . $e->getMessage() . "</p><pre>" . $e->getTraceAsString(), "</pre>";
+}
+set_exception_handler('exception_handler');

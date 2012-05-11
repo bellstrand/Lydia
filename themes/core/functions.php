@@ -6,5 +6,6 @@
 /**
 * Add static entries in the template file. 
 */
-$ly->data['header'] = '<h1>Header: Lydia</h1>';
+$ly->data['header'] = 'Lydia';
+$ly->data['slogan'] = 'A PHP-based MVC-inspired CMF';
 $ly->data['footer'] = '<p>Footer: &copy; Lydia replica by Magnus Bellstrand (bellstrand@gmail.com)';
