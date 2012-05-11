@@ -5,22 +5,45 @@
 * @package LydiaCore
 */
 class CLydia implements ISingleton{
+	/**
+	* Members
+	*/
 	private static $instance = null;
+	public $config = array();
+	public $request;
+	public $data;
+	public $db;
+	public $views;
+	public $session;
+	public $timer = array();
 	
 	/**
 	* Constructor
 	*/
 	private function __construct(){
+		// time page generation
+		$this->timer['first'] = microtime(true);
+		
 		//include the site specific config.php and create a ref to $ly to be used by config.php
 		$ly = &$this;
 		require_once(LYDIA_SITE_PATH.'/config.php');
-	}
-	
-	/**
-	* Destructor
-	*/
-	public function __destruct(){
-		;
+		
+		// Start a named session
+		session_name($this->config['session_name']);
+		session_start();
+		$this->session = new CSession($this->config['session_key']);
+		$this->session->PopulateFromSession();
+		
+		// Set default date/time-zome
+		date_default_timezone_set($this->config['timezone']);
+		
+		// Create a database object.
+		if(isset($this->config['database'][0]['dsn'])){
+			$this->db = new CDatabase($this->config['database'][0]['dsn']);
+			
+		// Create a container for all views and theme data
+		$this->views = new CViewContainer();
+		}
 	}
 	
 	/**
@@ -89,6 +112,15 @@ class CLydia implements ISingleton{
 	* Theme Engine Render, renders the reply of the request.
 	*/
 	public function ThemeEngineRender(){
+		// Save to session before output
+		$this->session->StoreInSession();
+		
+		// Is theme enabled?
+		if(!isset($this->config['theme'])){
+			return;
+		}
+		
+		// Get the paths and serrings for the theme
 		$themeName = $this->config['theme']['name'];
 		$themePath = LYDIA_INSTALL_PATH . "/themes/{$themeName}";
 		$themeUrl = $this->request->base_url . "themes/{$themeName}";
@@ -107,6 +139,7 @@ class CLydia implements ISingleton{
 		// Extract $ly->data to own variables and handover to the template file
 		extract($this->config);
 		extract($this->data);
+		extract($this->views->GetData());
 		include("{$themePath}/default.tpl.php");
 	}
 }
