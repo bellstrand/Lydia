@@ -4,33 +4,39 @@
 *
 * @package LydiaCode
 */
-class CCIndex implements IController{
+class CCIndex extends CObject implements IController{
+	/**
+	* Constructor
+	*/
+	public function __construct(){
+		parent::__construct();
+	}
+	
 	/**
 	* Implementing interface IController. All controllers must have an index action.
 	*/
 	public function Index(){
-		$this->Menu();
+		$this->views->SetTitle('Index Controller');
+		$this->views->AddInclude(__DIR__ . '/index.tpl.php', array('menu'=>$this->Menu()));
 	}
 	
 	/**
-	* Create a method that shows the menu, same for all methods
+	* A menu that shows all available controllers/methods
 	*/
 	private function Menu(){
-		$ly = CLydia::Instance();
-		$menu = array('index', 'index/index', 'developer', 'developer/index', 'developer/links');
-		
-		$html = null;
-		foreach($menu as $val){
-			$html .= "<li><a href='" . $ly->request->CreateUrl($val) . "'>$val</a>";
-			
-			$ly->data['title'] = "The Index Controller";
-			$ly->data['main'] = <<<EOD
-				<h1>The Index Controller</h1>
-				<p>This is what you can do for now:</p>
-				<ul>
-				$html
-				</ul>
-EOD;
+		$items = array();
+		foreach($this->config['controllers'] as $key => $val){
+			if($val['enabled']){
+				$rc = new ReflectionClass($val['class']);
+				$items[] = $key;
+				$methods = $rc->getMethods(ReflectionMethod::IS_PUBLIC);
+				foreach($methods as $method){
+					if($method->name != '__construct' && $method->name != '__destruct' && $method->name != 'Index'){
+						$items[] = "$key/" . mb_strtolower($method->name);
+					}
+				}
+			}
 		}
+		return $items;
 	}
 }

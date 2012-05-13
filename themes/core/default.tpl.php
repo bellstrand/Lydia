@@ -8,6 +8,9 @@
 <body>
 	<div id='wrap-header'>
 		<header id='header'>
+			<div id='login-menu'>
+				<?=login_menu()?>
+			</div>
 			<div id='banner'>
 				<a href='<?=base_url()?>'>site-logo</a>
 				<p class='site-title'><?=$header?></p>
