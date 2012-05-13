@@ -25,19 +25,34 @@ $ly->config['debug']['db-queries'] = true;
 $ly->config['database'][0]['dsn'] = 'sqlite:' . LYDIA_SITE_PATH . '/data/.ht.sqlite';
 
 /**
-* Define session name
+* What type of urls should be used?
+*
+* default		= 0		=> index.php/controller/method/arg1/arg2/arg3
+* clean			= 1		=> controller/method/arg1/arg2/arg3
+* querystring	= 2		=> index.php?q=controller/method/arg1/arg2/arg3
 */
-$ly->config['session_name'] = preg_replace('/[:\.\/-_]/', '', $_SERVER['SERVER_NAME']);
-
-/**
-* Define session key.
-*/
-$ly->config['session_key'] = 'lydia';
+$ly->config['url_type'] = 1;
 
 /**
 * Set a base_url to use another then the default calculated
 */
 $ly->config['base_url'] = null;
+
+/**
+* Allow or disallow creation of new user accounts.
+*/
+$ly->config['create_new_users'] = true;
+
+/**
+* How to hash password of new users, choose from: plain, md5salt, md5, sha1salt, sha1.
+*/
+$ly->config['hashing_algorithm'] = 'sha1salt';
+
+/**
+* Define session name
+*/
+$ly->config['session_name'] = preg_replace('/[:\.\/-_]/', '', $_SERVER['SERVER_NAME']);
+$ly->config['session_key'] = 'lydia';
 
 /**
 * Define server timezone
@@ -55,15 +70,6 @@ $ly->config['character_encoding'] = 'UTF-8';
 $ly->config['language'] = 'en-US';
 
 /**
-* What type of urls should be used?
-*
-* default		= 0		=> index.php/controller/method/arg1/arg2/arg3
-* clean			= 1		=> controller/method/arg1/arg2/arg3
-* querystring	= 2		=> index.php?q=controller/method/arg1/arg2/arg3
-*/
-$ly->config['url_type'] = 1;
-
-/**
 * Define the controllers, their classname and enable/disable them.
 *
 * The array-key is matched against the url, for example:
@@ -74,8 +80,10 @@ $ly->config['url_type'] = 1;
 */
 $ly->config['controllers'] = array(
 	'index' 	=> array('enabled' => true, 'class' => 'CCIndex'),
-	'developer' => array('enabled' => true,'class' => 'CCDeveloper'),
-	'guestbook' => array('enabled' => true,'class' => 'CCGuestbook'),
+	'developer' => array('enabled' => true, 'class' => 'CCDeveloper'),
+	'guestbook' => array('enabled' => true, 'class' => 'CCGuestbook'),
+	'user'		=> array('enabled' => true, 'class' => 'CCUser'),
+	'acp'		=> array('enabled' => true, 'class' => 'CCAdminControlPanel'),
 );
 
 /**
