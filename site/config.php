@@ -81,6 +81,7 @@ $ly->config['language'] = 'en-US';
 $ly->config['controllers'] = array(
 	'index' 	=> array('enabled' => true, 'class' => 'CCIndex'),
 	'developer' => array('enabled' => true, 'class' => 'CCDeveloper'),
+	'theme'		=> array('enabled' => true, 'class' => 'CCTheme'),
 	'guestbook' => array('enabled' => true, 'class' => 'CCGuestbook'),
 	'user'		=> array('enabled' => true, 'class' => 'CCUser'),
 	'acp'		=> array('enabled' => true, 'class' => 'CCAdminControlPanel'),
@@ -93,5 +94,16 @@ $ly->config['controllers'] = array(
 * Settings for the theme.
 */
 $ly->config['theme'] = array(
-	'name'	=> 'core',
+	'name'	=> 'grid',					// The name of the theme in the theme directory
+	'stylesheet' => 'style.php',		// Main stylesheet to include in template files
+	'template_file' => 'index.tpl.php',	// Default template file, else use default.tpl.php
+	// A list of valid theme regions
+	'regions' => array('flash', 'featured-first', 'featured-middle', 'featured-last', 'primary', 'sidebar', 'triptych-first', 'triptych-middle', 'triptych-last', 'footer-column-one', 'footer-column-two', 'footer-column-three', 'footer-column-four', 'footer',
+	),
+	// Add static entries for use in the template file.
+	'data' => array(
+		'header' => 'Lydia',
+		'slogan' => 'A PHP-based MVC-inspired CMF',
+		'footer' => '<p>Lydia replica &copy; by Magnus Bellstrand (bellstrand@gmail.com)</p>',
+	),
 );

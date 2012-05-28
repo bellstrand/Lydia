@@ -12,7 +12,7 @@ class CRequest{
 	public $querystringUrl;
 	
 	/**
-	* Contructor
+	* Constructor
 	*
 	* Decide which type of url should be generated as outgoing links.
 	* default      = 0      => index.php/controller/method/arg1/arg2/arg3
@@ -36,7 +36,7 @@ class CRequest{
 		}
 		
 		// Get current controller if empty and method choosen
-		if(empty($url) && !empty($method) || !empty($arguments)){
+		if(empty($url) && (!empty($method) || !empty($arguments))){
 			$url = $this->controller;
 		}
 		

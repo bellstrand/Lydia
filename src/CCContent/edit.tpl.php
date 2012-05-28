@@ -6,18 +6,23 @@
 	<p>Create new content.</p>
 <?php endif; ?>
 
+
 <?=$form->GetHTML(array('class'=>'content-edit'))?>
 
 <p class='smaller-text'><em>
 <?php if($content['created']): ?>
-	This content were created by <?=$content['owner']?> at <?=$content['created']?>.
+	This content were created by <?=$content['owner']?> <?=time_diff($content['created'])?> ago.
 <?php else: ?>
 	Content not yet created.
 <?php endif; ?>
 
 <?php if(isset($content['updated'])):?>
-	Last updated at <?=$content['updated']?>.
+	Last updated <?=time_diff($content['updated'])?> ago.
 <?php endif; ?>
 </em></p>
 
-<p><a href='<?=create_url('content')?>'>View all content</a></p>
+<p>
+<a href='<?=create_url('content', 'create')?>'>Create new</a>
+<a href='<?=create_url('page', 'view', $content['id'])?>'>View</a>
+<a href='<?=create_url('content')?>'>View all</a>
+</p>

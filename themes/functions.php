@@ -133,7 +133,8 @@ function create_url($urlOrController=null, $method=null, $arguments=null) {
 * Prepend the theme_url, which is the url to the current theme directory.
 */
 function theme_url($url){
-	return CLydia::Instance()->request->base_url . "themes/{$ly->config['theme']['name']}/{$url}";
+	$ly = CLydia::Instance();
+	return "{$ly->request->base_url}themes/{$ly->config['theme']['name']}/{$url}";
 }
 
 /**
@@ -145,8 +146,19 @@ function current_url() {
 
 /**
 * Render all views.
+*
+* @param $region string the region to draw the content in.
 */
 
-function render_views(){
-	return CLydia::Instance()->views->Render();
+function render_views($region='default'){
+	return CLydia::Instance()->views->Render($region);
+}
+
+/**
+* Check if region has views. Accepts variable amount of arguments as regions.
+*
+* @param $region string the region to draw the content in.
+*/
+function region_has_content($region='default' /*...*/){
+	return CLydia::Instance()->views->RegionHasView(func_get_args());
 }

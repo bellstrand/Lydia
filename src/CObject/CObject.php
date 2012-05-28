@@ -34,8 +34,12 @@ class CObject{
 	
 	/**
 	* Redirect to another url and store the session
+	*
+	* @param $url string the relative url or the controller
+	* @param $method string the method to use, $url is then the controller or empty for current controller
+	* @param $arguments string the extra arguments to send to the method
 	*/
-	protected function RedirectTo($urlOrController=null, $method=null) {
+	protected function RedirectTo($urlOrController=null, $method=null, $arguments=null) {
 		$ly = CLydia::Instance();
 		if(isset($ly->config['debug']['db-num-queries']) && $ly->config['debug']['db-num-queries'] && isset($ly->db)){
 			$this->session->SetFlash('database_numQueries', $this->db->GetNumQueries());
@@ -47,16 +51,17 @@ class CObject{
 			$this->session->SetFlash('timer', $ly->timer);
 		}    
 		$this->session->StoreInSession();
-		header('Location: ' . $this->request->CreateUrl($urlOrController, $method));
+		header('Location: ' . $this->request->CreateUrl($urlOrController, $method, $arguments));
 	}
 	
 	/**
 	* Redirect to a method within the current controller. Defaults to index-method. Uses RedirectTo().
 	*
 	* @param string method name the method, default is index method.
+	* @param $arguments string the extra arguments to send to the method
 	*/
-	protected function RedirectToController($method=null){
-		$this->RedirectTo($this->request->controller, $method);
+	protected function RedirectToController($method=null, $arguments=null){
+		$this->RedirectTo($this->request->controller, $method, $arguments);
 	}
 	
 	/**
@@ -64,11 +69,12 @@ class CObject{
 	*
 	* @param string controller name the controller or null for current controller.
 	* @param string method name the method, default is current method.
+	* @param $arguments string the extra arguments to send to the method
 	*/
-	protected function RedirectToControllerMethod($controller=null, $method=null){
+	protected function RedirectToControllerMethod($controller=null, $method=null, $arguments){
 		$controller = is_null($controller) ? $this->request->controller : null;
 		$method = is_null($method) ? $this->request->method : null;
-		$this->RedirectTo($this->request->CreateUrl($controller, $method));
+		$this->RedirectTo($this->request->CreateUrl($controller, $method, $arguments));
 	}
 	
 	/**
