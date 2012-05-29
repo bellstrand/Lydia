@@ -85,7 +85,7 @@ class CCUser extends CObject implements IController{
 	*/
 	public function DoLogin($form){
 		if($this->user->Login($form['acronym']['value'], $form['password']['value'])) {
-			$this->session->AddMessage('success', "Welcomeer {$this->user['name']}.");
+			$this->session->AddMessage('success', "Welcome {$this->user['name']}.");
 			$this->RedirectToController('profile');
 		}
 		else{

@@ -14,7 +14,7 @@ ini_set('display_errors', 1);
 * Set what to show as debug or developer information in the get_debug() theme helper.
 */
 $ly->config['debug']['lydia'] = false;
-$ly->config['debug']['session'] = false;
+$ly->config['debug']['session'] = true;
 $ly->config['debug']['timer'] = true;
 $ly->config['debug']['db-num-queries'] = true;
 $ly->config['debug']['db-queries'] = true;
