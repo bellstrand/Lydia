@@ -14,12 +14,10 @@ class CRequest{
 	/**
 	* Constructor
 	*
-	* Decide which type of url should be generated as outgoing links.
-	* default      = 0      => index.php/controller/method/arg1/arg2/arg3
-	* clean        = 1      => controller/method/arg1/arg2/arg3
-	* querystring  = 2      => index.php?q=controller/method/arg1/arg2/arg3
-	*
-	* @param boolean $urlType integer
+	* Default is to generate url's of type index.php/controller/method/arg1/arg2/arg2
+	* 
+	* @param boolean $clean generate clean url's of type /controller/method/arg1/arg2/arg2
+	* @param boolean $querystring generate clean url's of type index.php?q=controller/method/arg1/arg2/arg2
 	*/
 	public function __construct($urlType = 0){
 		$this->cleanUrl = $urlType= 1 ? true : false;
@@ -28,6 +26,11 @@ class CRequest{
 	
 	/**
 	* Create a url in the way it should be created.
+	*
+	* @param $url string the relative url or the controller
+	* @param $method string the method to use, $url is then the controller or empty for current controller.
+	* @param $arguments string the extra arguments to send to the method
+	* @return string the url
 	*/
 	public function CreateUrl($url=null, $method=null, $arguments=null){
 		// If fully qualified just leave it.
@@ -63,9 +66,14 @@ class CRequest{
 	}
 	
 	/**
-	* Init the object by parsing the current url request.
+	* Parse the current url request and divide it in controller, method and arguments.
+	*
+	* Calculates the base_url of the installation. Stores all useful details in $this.
+	*
+	* @param $baseUrl string use this as a hardcoded baseurl.
+	* @param $routing array key/val to use for routing if url matches key.
 	*/
-	public function Init($baseUrl = null){
+	public function Init($baseUrl=null, $routing=null){
 		// Take current url and divide it in controller, method and arguments.
 		$requestUri = $_SERVER['REQUEST_URI'];
 		$scriptName = $_SERVER['SCRIPT_NAME'];
@@ -88,6 +96,15 @@ class CRequest{
 		if(empty($request) && isset($_GET['q'])){
 			$request = trim($_GET['q']);
 		}
+		
+		// Check if request is empty and querystring link is set
+		$routed_from = null;
+		if(is_array($routing) && isset($routing[$request]) && $routing[$request]['enabled']){
+			$routed_from = $request;
+			$request = $routing[$request]['url'];
+		}
+		
+		// Split the request into its parts
 		$splits = explode('/', $request);
 		
 		// Set controller, method and arguments
@@ -106,6 +123,7 @@ class CRequest{
 		$this->current_url = $currentUrl;
 		$this->request_uri = $requestUri;
 		$this->script_name = $scriptName;
+		$this->routed_from = $routed_from;
 		$this->request = $request;
 		$this->splits = $splits;
 		$this->controller = $controller;
